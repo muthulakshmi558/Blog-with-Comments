@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Blog{% endblock %}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+<nav class="bg-purple-700 text-white p-4 shadow-md">
+<div class="container mx-auto flex justify-between items-center">
+<a href="{% url 'post-list' %}" class="text-xl font-bold">Blog Platform</a>
+<div>
+{% if user.is_authenticated %}
+<span class="mr-4">Hello, {{ user.username }}</span>
+<a href="{% url 'logout' %}" class="bg-white text-purple-700 px-4 py-1 rounded hover:bg-gray-200">Logout</a>
+{% else %}
+<a href="{% url 'login' %}" class="bg-white text-purple-700 px-4 py-1 rounded hover:bg-gray-200">Login</a>
+<a href="{% url 'register' %}" class="ml-2 bg-white text-purple-700 px-4 py-1 rounded hover:bg-gray-200">Register</a>
+{% endif %}
+</div>
+</div>
+</nav>
+
+<div class="container mx-auto mt-6">
+{% if messages %}
+{% for message in messages %}
+<div class="mb-4 p-4 rounded {{ message.tags }} bg-green-100 text-green-700">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends 'blog_app/Layout/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}All Posts{% endblock %}
+{% block content %}
+<div class="flex justify-between mb-6">
+<h2 class="text-2xl font-bold text-purple-700">All Posts</h2>
+{% if user.is_authenticated %}
+<a href="{% url 'post-create' %}" class="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800">+ New Post</a>
+{% endif %}
+</div>
+
+{% for post in posts %}
+<div class="bg-white rounded shadow mb-6 p-4">
+<h3 class="text-xl font-semibold">{{ post.title }}</h3>
+<p class="text-gray-600 text-sm">By {{ post.author.username }} | {{ post.created_at|date:"M d, Y" }}</p>
+{% if post.image %}
+<img src="{{ post.image.url }}" class="mt-2 w-full h-60 object-cover rounded">
+{% endif %}
+<p class="mt-2">{{ post.content|truncatechars:200 }}</p>
+<a href="{{ post.get_absolute_url }}" class="text-purple-700 hover:underline mt-2 inline-block">Read More</a>
+</div>
+{% endfor %}
+
+<div class="mt-6">
+{% if is_paginated %}
+<div class="flex justify-center space-x-2">
+{% if page_obj.has_previous %}
+<a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">&laquo; Prev</a>
+{% endif %}
+<span class="px-3 py-1 bg-gray-200 rounded">{{ page_obj.number }}</span>
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">Next &raquo;</a>
+{% endif %}
+</div>
+{% endif %}
+</div>
+{% endblock %}
